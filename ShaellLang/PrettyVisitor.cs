@@ -28,7 +28,7 @@ namespace ShaellLang
                 Console.Write(indent);
                 Visit(child);
                 Console.WriteLine();
-            }
+            }   
             return null;
         }
 

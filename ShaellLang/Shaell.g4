@@ -73,7 +73,7 @@ TRUE: 'true';
 STRINGLITERAL: '"' ~('"' | '\n')* '"';
 COMMENT : '#' ~['\n']* {this._tokenStartCharPositionInLine == 0}?;
 
-WHITESPACE: (' ' | '\t' | '\n')+ -> skip;
+WHITESPACE: (' ' | '\t' | '\r' | '\n')+ -> skip;
 
 /*
 Lacks functions and comments
