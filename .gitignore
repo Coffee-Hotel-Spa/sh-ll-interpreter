@@ -3,3 +3,5 @@ out/
 obj/
 bin/
 .idea/
+gen/
+.vs/
