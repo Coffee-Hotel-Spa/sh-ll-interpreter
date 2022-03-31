@@ -355,7 +355,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         if (num.Contains(".")) 
             return new Number(double.Parse(num));
 
-        return new Number(int.Parse(num));
+        return new Number(long.Parse(num));
     }
 
     public override IValue VisitFunctionCallExpr(ShaellParser.FunctionCallExprContext context)

@@ -55,7 +55,7 @@ namespace ShaellLang
 
         public ITable ToTable()
         {
-            _numberTable.Number = this;
+            _numberTable.Number = this; //TODO: this is a hack, fix it
             return _numberTable;
         }
 
@@ -67,7 +67,14 @@ namespace ShaellLang
             }
             else
             {
-                // Does not check for overflow where it should switch to floating
+                try
+                {
+                    long sum = checked(a.ToInteger() + b.ToInteger());
+                }
+                catch (OverflowException e)
+                {
+                    return new Number(a.ToFloating() + b.ToFloating());
+                }
                 return new Number(a.ToInteger() + b.ToInteger());
             }
         }
@@ -80,7 +87,14 @@ namespace ShaellLang
             }
             else
             {
-                // Does not check for overflow where it should switch to floating
+                try
+                {
+                    long diff = checked(a.ToInteger() - b.ToInteger());
+                }
+                catch (OverflowException e)
+                {
+                    return new Number(a.ToFloating() - b.ToFloating());
+                }
                 return new Number(a.ToInteger() - b.ToInteger());
             }
         }
@@ -91,8 +105,18 @@ namespace ShaellLang
             {
                 return new Number(a.ToFloating() * b.ToFloating());
             }
-            // Does not check for overflow where it should switch to floating
-            return new Number(a.ToInteger() * b.ToInteger());
+            else
+            {
+                try
+                {
+                    long prod = checked(a.ToInteger() * b.ToInteger());
+                }
+                catch (OverflowException e)
+                {
+                    return new Number(a.ToFloating() * b.ToFloating());
+                }
+                return new Number(a.ToInteger() * b.ToInteger());
+            }
         }
 
         public static Number operator /(Number a, Number b)
@@ -101,8 +125,10 @@ namespace ShaellLang
             {
                 return new Number(a.ToFloating() / b.ToFloating());
             }
-            // Does not check for overflow where it should switch to floating
-            return new Number(a.ToInteger() / b.ToInteger());
+            else
+            {
+                return new Number(a.ToInteger() / b.ToInteger());
+            }
         }
         
         public static Number operator %(Number a, Number b)
@@ -111,7 +137,6 @@ namespace ShaellLang
             {
                 return new Number(a.ToFloating() % b.ToFloating());
             }
-            // Does not check for overflow where it should switch to floating
             return new Number(a.ToInteger() % b.ToInteger());
         }
 
