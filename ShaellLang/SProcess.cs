@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace ShaellLang;
@@ -11,7 +12,17 @@ public class SProcess : IFunction
     private Process _process = new Process();
     public SProcess(string file)
     {
-        _process.StartInfo.FileName = file;
+        IPathFinder pathFinder;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            pathFinder = new WindowsPathFinder();
+            _process.StartInfo.FileName = pathFinder.GetAbsolutePath(file);
+        } /*else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            _process.StartInfo.FileName = pathFinder.GetAbsolutePath(file);
+        }*/
+
+        
     }
 
     private void AddArguments(ICollection<IValue> args)
