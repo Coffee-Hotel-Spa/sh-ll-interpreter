@@ -17,12 +17,11 @@ public class SProcess : IFunction
         {
             pathFinder = new WindowsPathFinder();
             _process.StartInfo.FileName = pathFinder.GetAbsolutePath(file);
-        } /*else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
+            pathFinder = new UnixPathFinder();
             _process.StartInfo.FileName = pathFinder.GetAbsolutePath(file);
-        }*/
-
-        
+        }
     }
 
     private void AddArguments(ICollection<IValue> args)
