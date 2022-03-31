@@ -69,13 +69,12 @@ namespace ShaellLang
             {
                 try
                 {
-                    long sum = checked(a.ToInteger() + b.ToInteger());
+                    return new Number(checked(a.ToInteger() + b.ToInteger()));
                 }
                 catch (OverflowException e)
                 {
                     return new Number(a.ToFloating() + b.ToFloating());
                 }
-                return new Number(a.ToInteger() + b.ToInteger());
             }
         }
         
@@ -89,13 +88,12 @@ namespace ShaellLang
             {
                 try
                 {
-                    long diff = checked(a.ToInteger() - b.ToInteger());
+                    return new Number(checked(a.ToInteger() - b.ToInteger()));
                 }
                 catch (OverflowException e)
                 {
                     return new Number(a.ToFloating() - b.ToFloating());
                 }
-                return new Number(a.ToInteger() - b.ToInteger());
             }
         }
 
@@ -109,13 +107,12 @@ namespace ShaellLang
             {
                 try
                 {
-                    long prod = checked(a.ToInteger() * b.ToInteger());
+                    return new Number(checked(a.ToInteger() * b.ToInteger()));
                 }
                 catch (OverflowException e)
                 {
                     return new Number(a.ToFloating() * b.ToFloating());
                 }
-                return new Number(a.ToInteger() * b.ToInteger());
             }
         }
 
