@@ -18,7 +18,6 @@ public class UnixPathFinder : IPathFinder
     
     public string GetAbsolutePath(string path)
     {
-        Console.WriteLine(GetFirstExisting(path));
         return GetFirstExisting(path);
     }
     
