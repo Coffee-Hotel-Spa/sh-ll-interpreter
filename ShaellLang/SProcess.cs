@@ -51,17 +51,12 @@ public class SProcess : BaseValue, IFunction
         return Run(Process, Stdin);
     }
 
-    public IValue Call()
-    {
-        return Run(Process, Stdin);
-    }
-
-    public IValue Pipe(SProcess parentProc)
+    public IValue Execute(SProcess parentProc)
     {
         JobObject jo = null;
         if (LeftProcess?.Executed != true)
         {
-            jo = LeftProcess?.Pipe(this).ToJobObject();
+            jo = LeftProcess?.Execute(this).ToJobObject();
         }
         
         jo = Run(Process, jo?.ToString()).ToJobObject();
@@ -69,7 +64,6 @@ public class SProcess : BaseValue, IFunction
         if(parentProc is not null)
             parentProc.Stdin = jo?.ToString();
         return jo;
-
     }
     
     public override IFunction ToFunction() => this;

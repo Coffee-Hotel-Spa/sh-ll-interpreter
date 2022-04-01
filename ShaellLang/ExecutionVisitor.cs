@@ -60,8 +60,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
             var child = Visit(context.children[0]);
             if (child is SProcess proc)
             {
-                var jo = proc.Pipe(null).ToJobObject();
-                Console.Write(jo);
+                var jo = proc.Execute(null).ToJobObject();
                 return jo;
             }
                 
