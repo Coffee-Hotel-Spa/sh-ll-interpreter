@@ -43,7 +43,7 @@ public class UnixPathFinder : IPathFinder
         {
             
             var absolutePath = Path.Join(envPath, path);
-            if (File.Exists(absolutePath) && CanBeExecutable(absolutePath))
+            if (CanBeExecutable(absolutePath))
                 return absolutePath;
             
         }
