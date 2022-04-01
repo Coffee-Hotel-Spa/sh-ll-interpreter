@@ -56,6 +56,7 @@ public class JobObject : BaseValue
             process.EnableRaisingEvents = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.RedirectStandardError = true;
 
             process.Start();

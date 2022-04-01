@@ -63,17 +63,18 @@ public class SProcess : BaseValue, IFunction
         {
             jo = LeftProcess?.Pipe(this).ToJobObject();
         }
-
-        jo = Run(Process, jo?.ToString()).ToJobObject();
         
+        jo = Run(Process, jo?.ToString()).ToJobObject();
+
         if(parentProc is not null)
             parentProc.Stdin = jo?.ToString();
-        Console.WriteLine(jo);
         return jo;
 
     }
     
     public override IFunction ToFunction() => this;
+    public override SProcess ToSProcess() => this;
+
     public override bool IsEqual(IValue other)
     {
         return other == this;

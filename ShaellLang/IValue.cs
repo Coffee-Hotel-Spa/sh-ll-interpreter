@@ -17,6 +17,8 @@ namespace ShaellLang
 
 		JobObject ToJobObject();
 
+		SProcess ToSProcess();
+
 		bool IsEqual(IValue other);
 
 		string GetTypeName();

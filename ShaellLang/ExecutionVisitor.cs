@@ -61,7 +61,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
             if (child is SProcess proc)
             {
                 var jo = proc.Pipe(null).ToJobObject();
-                Console.WriteLine(jo);
+                Console.Write(jo);
                 return jo;
             }
                 
@@ -335,7 +335,12 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
 
     public override IValue VisitPIPEExpr(ShaellParser.PIPEExprContext context)
     {
-        return null;
+        var lhs = Visit(context.expr(0)).ToSProcess();
+        var rhs = Visit(context.expr(1)).ToSProcess();
+
+        rhs.LeftProcess = lhs;
+        
+        return rhs;
     }
 
     public override IValue VisitStringLiteralExpr(ShaellParser.StringLiteralExprContext context)
