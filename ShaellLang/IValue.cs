@@ -14,5 +14,11 @@ namespace ShaellLang
 		SString ToSString();
 
 		ITable ToTable();
+
+		bool IsEqual(IValue other);
+
+		string GetTypeName();
+
+		IValue Unpack();
 	}
 }

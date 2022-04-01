@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ShaellLang;
 
-public class SProcess : IFunction
+public class SProcess : BaseValue, IFunction
 {
     private Process _process = new Process();
-    public SProcess(string file)
+    public SProcess(string file) 
+        : base("process")
     {
         IPathFinder pathFinder;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -24,7 +25,7 @@ public class SProcess : IFunction
         }
     }
 
-    private void AddArguments(ICollection<IValue> args)
+    private void AddArguments(IEnumerable<IValue> args)
     {
         foreach (var arg in args)
         {
@@ -40,17 +41,17 @@ public class SProcess : IFunction
         return JobObject.Factory.StartProcess(process);
     }
 
-    public IValue Call(ICollection<IValue> args)
+    public IValue Call(IEnumerable<IValue> args)
     {
         AddArguments(args);
         return Run(_process);
     }
     
-    IFunction IValue.ToFunction() => this;
-    public bool ToBool() => throw new System.NotImplementedException();
-    public Number ToNumber() => throw new System.NotImplementedException();
-    public IFunction ToFunction => throw new System.NotImplementedException();
-    public SString ToSString() => throw new System.NotImplementedException();
-    public ITable ToTable() => throw new System.NotImplementedException();
+    public override IFunction ToFunction() => this;
+    public override bool IsEqual(IValue other)
+    {
+        return other == this;
+    }
+
     public uint ArgumentCount { get; }
 }

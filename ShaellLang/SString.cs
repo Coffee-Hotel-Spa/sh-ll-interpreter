@@ -1,39 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ShaellLang;
 
-public class SString : NativeTable, IValue, IKeyable
+public class SString : BaseValue, ITable, IKeyable
 {
     private string _val;
-
+    private NativeTable _nativeTable;
+    
     public SString(string str)
+        : base("string")
     {
         _val = str;
+        _nativeTable = new NativeTable();
         
-        SetValue("length", new NativeFunc(lengthCallHandler, 0));
-        SetValue("substring", new NativeFunc(argCollection =>
-        {
-            Number[] args = argCollection.ToArray().Select(x => x.ToNumber()).ToArray();
-            return new SString(Val.Substring((int)args[0].ToInteger(), (int)args[1].ToInteger()));
-        }, 2));
+        _nativeTable.SetValue("length", new NativeFunc(lengthCallHandler, 0));
+        _nativeTable.SetValue("substring", new NativeFunc(SubStringFunc, 2));
     }
 
-    private IValue lengthCallHandler(ICollection<IValue> args)
+    private IValue SubStringFunc(IEnumerable<IValue> argCollection)
+    {
+        Number[] args = argCollection.ToArray().Select(x => x.ToNumber()).ToArray();
+        return new SString(Val.Substring((int) args[0].ToInteger(), (int) args[1].ToInteger()));
+    }
+
+    private IValue lengthCallHandler(IEnumerable<IValue> args)
     {
         return new Number(this._val.Length);
     }
 
-    public bool ToBool() => true;
-    public Number ToNumber() => new Number(int.Parse(_val));
+    public override bool ToBool() => true;
+    public override SString ToSString() => this;
+    public override ITable ToTable() => this;
+    public override bool IsEqual(IValue other)
+    {
+        if (other is SString otherString)
+        {
+            return _val == otherString._val;
+        }
 
-    public IFunction ToFunction() => throw new Exception("Cannot convert string to function");
+        return false;
+    }
 
-    public SString ToSString() => this;
-    public ITable ToTable() => this;
-    
-    public override RefValue GetValue(IKeyable key)
+    public RefValue GetValue(IKeyable key)
     {
         if (key is Number numberKey)
         {
@@ -47,7 +58,42 @@ public class SString : NativeTable, IValue, IKeyable
                 }
             }
         }
-        return base.GetValue(key);
+        return _nativeTable.GetValue(key);
+    }
+
+    public void RemoveValue(IKeyable key)
+    {
+        return;
+    }
+
+    public static SString operator +(SString left, SString right)
+    {
+        return new SString(left.Val + right.Val);
+    }
+
+    public static SString operator *(SString left, Number right)
+    {
+        StringBuilder sb = new StringBuilder();
+        if (right.IsInteger)
+        {
+            var val = right.ToInteger();
+            if (val > int.MaxValue)
+                throw new Exception("String multiplication overflow");
+            if (val < 0)
+                throw new Exception("String cannot be multiplied with less than 0");
+            sb.Insert(0, left.Val, (int) val);
+        }
+        else
+        {
+            var floored = Math.Floor(right.ToFloating());
+            if (floored > int.MaxValue)
+                throw new Exception("String multiplication overflow");
+            if (floored < 0)
+                throw new Exception("String cannot be multiplied with less than 0");
+            sb.Insert(0, left.Val, (int) Math.Floor(right.ToFloating()));
+        }
+
+        return new SString(sb.ToString());
     }
 
     public string Val => _val;
