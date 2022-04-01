@@ -19,6 +19,8 @@ public abstract class BaseValue : IValue
 
     public virtual ITable ToTable() => throw new Exception($"Cannot convert {_typeName} to table");
 
+    public virtual JobObject ToJobObject() => throw new Exception($"Cannot convert {_typeName} to Job Object");
+
     public abstract bool IsEqual(IValue other);
     
     public string GetTypeName() => _typeName;

@@ -66,6 +66,11 @@ public class SString : BaseValue, ITable, IKeyable
         return;
     }
 
+    public override string ToString()
+    {
+        return _val;
+    }
+
     public string Val => _val;
     public string KeyValue => _val;
     public string UniquePrefix => "S";

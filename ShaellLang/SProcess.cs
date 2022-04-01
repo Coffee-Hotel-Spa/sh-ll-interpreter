@@ -8,14 +8,17 @@ namespace ShaellLang;
 
 public class SProcess : BaseValue, IFunction
 {
-    private Process _process = new Process();
+    public Process Process = new Process();
+    public SProcess LeftProcess;
+    public string Stdin = null;
+    public bool Executed { get; private set; }
     public SProcess(string file) 
         : base("process")
     {
-        _process.StartInfo.FileName = file;
+        Process.StartInfo.FileName = file;
     }
 
-    private void AddArguments(IEnumerable<IValue> args)
+    public void AddArguments(IEnumerable<IValue> args)
     {
         foreach (var arg in args)
         {
@@ -23,18 +26,51 @@ public class SProcess : BaseValue, IFunction
         }
     }
 
-    private void AddArg(string str) => _process.StartInfo.ArgumentList.Add(str);
-    public void Dispose() => _process.Dispose();
-
-    private JobObject Run(Process process)
+    public void AddPipeProcess(SProcess process)
     {
-        return JobObject.Factory.StartProcess(process);
+        LeftProcess = process;
+    }
+
+    private void AddArg(string str) => Process.StartInfo.ArgumentList.Add(str);
+    public void Dispose() => Process.Dispose();
+
+    private JobObject Run(Process process, string stdin)
+    {
+        if (!Executed)
+        {
+            Executed = true;
+            return JobObject.Factory.StartProcess(process, stdin);
+        }
+
+        return null;
     }
 
     public IValue Call(IEnumerable<IValue> args)
     {
         AddArguments(args);
-        return Run(_process);
+        return Run(Process, Stdin);
+    }
+
+    public IValue Call()
+    {
+        return Run(Process, Stdin);
+    }
+
+    public IValue Pipe(SProcess parentProc)
+    {
+        JobObject jo = null;
+        if (LeftProcess?.Executed != true)
+        {
+            jo = LeftProcess?.Pipe(this).ToJobObject();
+        }
+
+        jo = Run(Process, jo?.ToString()).ToJobObject();
+        
+        if(parentProc is not null)
+            parentProc.Stdin = jo?.ToString();
+        Console.WriteLine(jo);
+        return jo;
+
     }
     
     public override IFunction ToFunction() => this;
@@ -43,5 +79,5 @@ public class SProcess : BaseValue, IFunction
         return other == this;
     }
 
-    public uint ArgumentCount { get; }
+    public uint ArgumentCount => (uint)Process.StartInfo.ArgumentList.Count;
 }
