@@ -53,26 +53,26 @@ public class SProcess : BaseValue, IFunction
 
     public JobObject Execute(SProcess parentProc)
     {
-        JobObject jo = null;
-        if (LeftProcess?.Executed != true)
-        {
-            jo = LeftProcess?.Execute(this).ToJobObject();
-        }
-        
+        JobObject jo = LeftProcess?.Execute(this).ToJobObject();
         jo = Run(Process, jo?.ToString()).ToJobObject();
 
-        if(parentProc is not null)
+        if(parentProc != null)
             parentProc.Stdin = jo?.ToString();
+        return jo;
+    }
+    
+    public JobObject Execute()
+    {
+        JobObject jo = LeftProcess?.Execute(this).ToJobObject();
+        jo = Run(Process, jo?.ToString()).ToJobObject();
+        
         return jo;
     }
     
     public override IFunction ToFunction() => this;
     public override SProcess ToSProcess() => this;
 
-    public override ITable ToTable()
-    {
-        return Execute(null).ToTable();
-    }
+    public override ITable ToTable() => Execute().ToTable();
 
     public override bool IsEqual(IValue other)
     {
