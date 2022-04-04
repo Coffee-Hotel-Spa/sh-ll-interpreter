@@ -233,7 +233,6 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
 
     public override IValue VisitPlusEqExpr(ShaellParser.PlusEqExprContext context)
     {
-        Console.WriteLine("AH yes i am here");
         var lhs = Visit(context.expr(0));
 
         if (lhs is not RefValue)
@@ -327,6 +326,56 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         }
         
         var rhsResult = lhs.ToNumber() / rhs.ToNumber();
+        
+        refLhs.Set(rhsResult);
+
+        return refLhs.Get();
+    }
+    
+    public override IValue VisitModEqExpr(ShaellParser.ModEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = lhs.ToNumber() % rhs.ToNumber();
+        
+        refLhs.Set(rhsResult);
+
+        return refLhs.Get();
+    }
+
+    public override IValue VisitPowEqExpr(ShaellParser.PowEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = Number.Power(lhs.ToNumber(), rhs.ToNumber());
         
         refLhs.Set(rhsResult);
 
