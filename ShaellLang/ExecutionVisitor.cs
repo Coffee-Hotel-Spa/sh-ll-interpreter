@@ -162,7 +162,6 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         {
             rhs = (rhs as RefValue).Get();
         }
-        //TODO: Det her assigner lhs til en reference til IValue hvilket lige skal fixes
         
         refLhs.Set(rhs);
 
@@ -230,6 +229,106 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         var exponent = Visit(context.expr(1));
 
         return Number.Power(basenum.ToNumber(), exponent.ToNumber());
+    }
+
+    public override IValue VisitPlusEqExpr(ShaellParser.PlusEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = lhs.ToNumber() + rhs.ToNumber();
+        
+        refLhs.Set(rhs);
+
+        return refLhs.Get();
+    }
+    
+    public override IValue VisitMinusEqExpr(ShaellParser.MinusEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = lhs.ToNumber() - rhs.ToNumber();
+        
+        refLhs.Set(rhs);
+
+        return refLhs.Get();
+    }
+    
+    public override IValue VisitMultEqExpr(ShaellParser.MultEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = lhs.ToNumber() * rhs.ToNumber();
+        
+        refLhs.Set(rhs);
+
+        return refLhs.Get();
+    }
+    
+    public override IValue VisitDivEqExpr(ShaellParser.DivEqExprContext context)
+    {
+        var lhs = Visit(context.expr(0));
+
+        if (lhs is not RefValue)
+        {
+            throw new Exception("Tried to assign to non ref");
+        }
+    
+        var refLhs = lhs as RefValue;
+        
+        var rhs = Visit(context.expr(1));
+        
+        if (rhs is RefValue)
+        {
+            rhs = (rhs as RefValue).Get();
+        }
+        
+        var rhsResult = lhs.ToNumber() / rhs.ToNumber();
+        
+        refLhs.Set(rhs);
+
+        return refLhs.Get();
     }
     #endregion
 
