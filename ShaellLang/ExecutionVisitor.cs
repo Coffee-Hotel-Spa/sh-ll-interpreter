@@ -233,6 +233,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
 
     public override IValue VisitPlusEqExpr(ShaellParser.PlusEqExprContext context)
     {
+        Console.WriteLine("AH yes i am here");
         var lhs = Visit(context.expr(0));
 
         if (lhs is not RefValue)
@@ -249,9 +250,10 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
             rhs = (rhs as RefValue).Get();
         }
         
-        var rhsResult = lhs.ToNumber() + rhs.ToNumber();
-        
-        refLhs.Set(rhs);
+        if (lhs.Unpack() is SString || rhs.Unpack() is SString)
+            refLhs.Set(lhs.ToSString() + rhs.ToSString());
+        else
+            refLhs.Set(lhs.ToNumber() + rhs.ToNumber());
 
         return refLhs.Get();
     }
@@ -276,7 +278,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         
         var rhsResult = lhs.ToNumber() - rhs.ToNumber();
         
-        refLhs.Set(rhs);
+        refLhs.Set(rhsResult);
 
         return refLhs.Get();
     }
@@ -301,7 +303,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         
         var rhsResult = lhs.ToNumber() * rhs.ToNumber();
         
-        refLhs.Set(rhs);
+        refLhs.Set(rhsResult);
 
         return refLhs.Get();
     }
@@ -326,7 +328,7 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
         
         var rhsResult = lhs.ToNumber() / rhs.ToNumber();
         
-        refLhs.Set(rhs);
+        refLhs.Set(rhsResult);
 
         return refLhs.Get();
     }
