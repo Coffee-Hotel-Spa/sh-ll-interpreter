@@ -63,6 +63,7 @@ BANDEQ: '&=';
 BXOREQ: '^=';
 BOREQ: '|=';
 MODEQ: '%=';
+POWEQ: '**=';
 RSHIFTEQ: '>>=';
 LSHIFTEQ: '<<=';
 FALSE: 'false';
@@ -118,6 +119,12 @@ expr: STRINGLITERAL # StringLiteralExpr
     | expr LOR expr # LORExpr
     | expr PIPE expr # PIPEExpr
 	|<assoc=right> expr ASSIGN expr # AssignExpr
+	|<assoc=right> expr PLUSEQ expr  # PlusEqExpr
+	|<assoc=right> expr MINUSEQ expr # MinusEqExpr
+	|<assoc=right> expr MULTEQ expr # MultEqExpr
+	|<assoc=right> expr DIVEQ expr # DivEqExpr
+    |<assoc=right> expr MODEQ expr # ModEqExpr
+    |<assoc=right> expr POWEQ expr # PowEqExpr
 	;
 objfields:
     FILEIDENTFIER # FieldIdentifier
