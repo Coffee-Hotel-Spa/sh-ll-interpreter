@@ -610,14 +610,13 @@ public class ExecutionVisitor : ShaellBaseVisitor<IValue>
 
     public override IValue VisitProgramArgs(ShaellParser.ProgramArgsContext context)
     {
-
-        var table = new UserTable();
         var lastUserVar = context.innerFormalArgList().VARIDENTFIER().Last();
 
         foreach (var userVar in context.innerFormalArgList().VARIDENTFIER())
         {
-            if (userVar.Equals(lastUserVar))
+            if (userVar.Equals(lastUserVar) && _args.Length != 1)
             {
+                var table = new UserTable();
                 for (int i = 0; i < _args.Length; i++)
                 {
                     table.Insert(new Number(i), new RefValue(new SString(_args[i])));
