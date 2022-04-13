@@ -8,7 +8,7 @@ namespace ShaellLang;
 
 public class StdLib
 {
-    public static IValue printFunc(IEnumerable<IValue> args)
+    public static IValue PrintFunc(IEnumerable<IValue> args)
     {
         foreach (var value in args)
             Console.Write(value);
@@ -17,13 +17,13 @@ public class StdLib
         return new SNull();
     }
 
-    public static IValue debugBreakFunc(IEnumerable<IValue> args)
+    public static IValue DebugBreakFunc(IEnumerable<IValue> args)
     {
         Console.WriteLine("Debug break");
         return new SNull();
     }
     
-    public static IValue cdFunc(IEnumerable<IValue> args)
+    public static IValue CdFunc(IEnumerable<IValue> args)
     {
         var argArr = args.ToArray();
 
@@ -40,13 +40,13 @@ public class StdLib
         return new SNull();
     }
 
-    public static IValue pwdFunc(IEnumerable<IValue> args)
+    public static IValue PwdFunc(IEnumerable<IValue> args)
     {
         Console.WriteLine(Directory.GetCurrentDirectory());
         return new SNull();
     }
 
-    public static IValue exitFunc(IEnumerable<IValue> args)
+    public static IValue ExitFunc(IEnumerable<IValue> args)
     {
         var argArr = args.ToArray();
 

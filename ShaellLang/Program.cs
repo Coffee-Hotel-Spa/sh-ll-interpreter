@@ -35,11 +35,11 @@ namespace ShaellLang
             
             ExecutionVisitor executer = interactivemode ? new ExecutionVisitor() : new ExecutionVisitor(args[1..]);
 
-            executer.SetGlobal("print", new NativeFunc(StdLib.printFunc, 0));
-            executer.SetGlobal("cd", new NativeFunc(StdLib.cdFunc, 0));
-            executer.SetGlobal("exit", new NativeFunc(StdLib.exitFunc, 0));
-            executer.SetGlobal("debug_break", new NativeFunc(StdLib.debugBreakFunc, 0));
-            executer.SetGlobal("pwd", new NativeFunc(StdLib.pwdFunc, 0));
+            executer.SetGlobal("print", new NativeFunc(StdLib.PrintFunc, 0));
+            executer.SetGlobal("cd", new NativeFunc(StdLib.CdFunc, 0));
+            executer.SetGlobal("exit", new NativeFunc(StdLib.ExitFunc, 0));
+            executer.SetGlobal("debug_break", new NativeFunc(StdLib.DebugBreakFunc, 0));
+            executer.SetGlobal("pwd", new NativeFunc(StdLib.PwdFunc, 0));
             executer.SetGlobal("T", TableLib.CreateLib());
             executer.SetGlobal("A", TestLib.CreateLib());
 
