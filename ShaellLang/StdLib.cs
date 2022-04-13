@@ -40,12 +40,6 @@ public class StdLib
         return new SNull();
     }
 
-    public static IValue PwdFunc(IEnumerable<IValue> args)
-    {
-        Console.WriteLine(Directory.GetCurrentDirectory());
-        return new SNull();
-    }
-
     public static IValue ExitFunc(IEnumerable<IValue> args)
     {
         var argArr = args.ToArray();
