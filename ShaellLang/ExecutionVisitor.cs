@@ -129,7 +129,7 @@ public class ExecutionVisitor : ShaellParserBaseVisitor<IValue>
 
     public override IValue VisitForeach(ShaellParser.ForeachContext context)
     {
-        var table = SafeVisit(context.expr()).Unpack().ToTable();
+        var table = SafeVisit(context.expr()).ToTable();
 
         foreach (var key in table.GetKeys())
         {
@@ -146,7 +146,7 @@ public class ExecutionVisitor : ShaellParserBaseVisitor<IValue>
 
     public override IValue VisitForeachKeyValue(ShaellParser.ForeachKeyValueContext context)
     {
-        var table = SafeVisit(context.expr()).Unpack().ToTable();
+        var table = SafeVisit(context.expr()).ToTable();
 
         foreach (var key in table.GetKeys())
         {
